@@ -1,9 +1,8 @@
 import Koa from "koa";
 import { koaBody } from "koa-body";
-import Router from "@koa/router";
+import { router } from "./routes";
 
 const app = new Koa();
-const router = new Router();
 
 app.use(koaBody());
 
