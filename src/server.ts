@@ -1,12 +1,8 @@
-import http from 'http'
+import app from "./app";
+import env from "./config/env";
 
-const PORT = process.env.PORT || 3000
-
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' })
-  res.end('Todo Server is running\n')
-})
-
-server.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`)
-})
+app.listen(env.port, () => {
+  console.log(
+    `Server running on http://localhost:${env.port} [${env.nodeEnv}]`,
+  );
+});
