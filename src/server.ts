@@ -1,19 +1,24 @@
-import mongoose from "mongoose";
 import app from "@/app";
-import env from "@/config/env";
-import { connectMongo } from "@/config/mongodb";
+import {
+  envConfig,
+  connectMongo,
+  disconnectMongo,
+  connectRedis,
+  disconnectRedis,
+} from "@/config";
 
 async function bootstrap() {
-  await connectMongo();
-  const server = app.listen(env.port, () => {
+  await Promise.all([connectMongo(), connectRedis()]);
+
+  const server = app.listen(envConfig.port, () => {
     console.log(
-      `Server running on http://localhost:${env.port} [${env.nodeEnv}]`,
+      `Server running on http://localhost:${envConfig.port} [${envConfig.nodeEnv}]`,
     );
   });
 
   process.on("SIGINT", async () => {
     server.close();
-    await mongoose.connection.close();
+    await Promise.all([disconnectMongo(), disconnectRedis()]);
     console.log("[Server] Gracefully shut down");
     process.exit(0);
   });
