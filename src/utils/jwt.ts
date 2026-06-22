@@ -12,7 +12,19 @@ function signAccessToken(payload: JwtPayload) {
 }
 
 function verifyToken(token: string) {
-  return jwt.verify(token, env.jwtSecret);
+  return jwt.verify(token, env.jwtSecret) as JwtPayload;
 }
 
-export { signAccessToken, verifyToken };
+function signRefreshToken(payload: JwtPayload) {
+  const options: SignOptions = {
+    expiresIn: env.jwtRefreshExpires as SignOptions["expiresIn"],
+  };
+
+  return jwt.sign(payload, env.jwtRefreshSecret, options);
+}
+
+function verifyRefreshToken(token: string) {
+  return jwt.verify(token, env.jwtRefreshSecret) as JwtPayload;
+}
+
+export { signAccessToken, verifyToken, signRefreshToken, verifyRefreshToken };

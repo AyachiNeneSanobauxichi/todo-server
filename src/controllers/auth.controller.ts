@@ -1,5 +1,6 @@
 import type { Context } from "koa";
-import type { LoginDTO } from "@/interfaces";
+import type { LoginDTO, RefreshTokenDTO } from "@/interfaces";
+import type { JwtPayload } from "@/types";
 import { authService } from "@/services";
 
 const authController = {
@@ -13,6 +14,18 @@ const authController = {
     const { username, password } = ctx.request.body as unknown as LoginDTO;
     const data = await authService.login(username, password);
     ctx.body = { code: 0, data };
+  },
+
+  async refreshToken(ctx: Context) {
+    const { refreshToken } = ctx.request.body as unknown as RefreshTokenDTO;
+    const data = await authService.refreshToken(refreshToken);
+    ctx.body = { code: 0, data };
+  },
+
+  async logout(ctx: Context) {
+    const { userId } = ctx.state.user as JwtPayload;
+    await authService.logout(userId);
+    ctx.body = { code: 0, message: "Logged out successfully" };
   },
 };
 
