@@ -1,14 +1,19 @@
 import type { Context, Next } from "koa";
-import { verifyToken } from "@/utils";
+import { fail, verifyToken } from "@/utils";
 import { tokenRepository } from "@/repositories";
+import { ErrorCode } from "@/constants";
 
 const authMiddleware = {
   async verifyToken(ctx: Context, next: Next) {
     const authHeader = ctx.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      ctx.status = 401;
-      ctx.body = { code: 401, message: "Unauthorized" };
+      fail(
+        ctx,
+        401,
+        ErrorCode.UNAUTHORIZED.code,
+        ErrorCode.UNAUTHORIZED.message,
+      );
       return;
     }
 
@@ -18,16 +23,24 @@ const authMiddleware = {
 
       // 命中黑名单（已登出的 token）直接拒绝
       if (await tokenRepository.isBlacklisted(payload.jti)) {
-        ctx.status = 401;
-        ctx.body = { code: 401, message: "Token has been invalidated" };
+        fail(
+          ctx,
+          401,
+          ErrorCode.TOKEN_BLACKLISTED.code,
+          ErrorCode.TOKEN_BLACKLISTED.message,
+        );
         return;
       }
 
       ctx.state.user = payload;
       await next();
     } catch {
-      ctx.status = 401;
-      ctx.body = { code: 401, message: "Invalid token" };
+      fail(
+        ctx,
+        401,
+        ErrorCode.TOKEN_INVALID.code,
+        ErrorCode.TOKEN_INVALID.message,
+      );
       return;
     }
   },
