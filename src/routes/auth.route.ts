@@ -1,12 +1,17 @@
 import Router from "@koa/router";
 import { authController } from "@/controllers";
-import { authMiddleware } from "@/middlewares";
+import { authMiddleware, validate } from "@/middlewares";
+import { loginSchema, refreshTokenSchema } from "@/validators";
 
 const authRouter = new Router({ prefix: "/auth" });
 
-authRouter.post("/register", authController.register);
-authRouter.post("/login", authController.login);
-authRouter.post("/refresh-token", authController.refreshToken);
+authRouter.post("/register", validate(loginSchema), authController.register);
+authRouter.post("/login", validate(loginSchema), authController.login);
+authRouter.post(
+  "/refresh-token",
+  validate(refreshTokenSchema),
+  authController.refreshToken,
+);
 authRouter.post("/logout", authMiddleware.verifyToken, authController.logout);
 
 export { authRouter };
