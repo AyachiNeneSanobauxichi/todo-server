@@ -3,4 +3,10 @@ interface JwtPayload {
   username: string;
 }
 
-export type { JwtPayload };
+interface AccessTokenPayload extends JwtPayload {
+  jti: string;
+  iat: number;
+  exp: number;
+}
+
+export type { JwtPayload, AccessTokenPayload };

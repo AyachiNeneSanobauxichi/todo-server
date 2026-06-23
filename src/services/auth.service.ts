@@ -1,4 +1,5 @@
 import { tokenRepository, userRepository } from "@/repositories";
+import { AccessTokenPayload } from "@/types";
 import {
   hashPassword,
   comparePassword,
@@ -63,8 +64,14 @@ const authService = {
     return { accessToken };
   },
 
-  async logout(userId: string) {
-    await tokenRepository.deleteRefreshToken(userId);
+  async logout(payload: AccessTokenPayload) {
+    // 计算 access token 的剩余寿命，作为黑名单 TTL
+    const ttl = payload.exp - Math.floor(Date.now() / 1000);
+    if (ttl > 0) {
+      await tokenRepository.addToBlacklist(payload.jti, ttl);
+    }
+
+    await tokenRepository.deleteRefreshToken(payload.userId);
   },
 };
 

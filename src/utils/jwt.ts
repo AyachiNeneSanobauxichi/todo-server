@@ -1,18 +1,20 @@
-import type { JwtPayload } from "@/types";
+import type { AccessTokenPayload, JwtPayload } from "@/types";
 import type { SignOptions } from "jsonwebtoken";
+import { randomUUID } from "node:crypto";
 import jwt from "jsonwebtoken";
 import env from "@/config/env";
 
 function signAccessToken(payload: JwtPayload) {
   const options: SignOptions = {
     expiresIn: env.jwtAccessExpires as SignOptions["expiresIn"],
+    jwtid: randomUUID(),
   };
 
   return jwt.sign(payload, env.jwtSecret, options);
 }
 
 function verifyToken(token: string) {
-  return jwt.verify(token, env.jwtSecret) as JwtPayload;
+  return jwt.verify(token, env.jwtSecret) as AccessTokenPayload;
 }
 
 function signRefreshToken(payload: JwtPayload) {
