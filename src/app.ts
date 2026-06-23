@@ -1,9 +1,11 @@
 import Koa from "koa";
 import { koaBody } from "koa-body";
 import { router } from "./routes";
+import { errorMiddleware } from "./middlewares";
 
 const app = new Koa();
 
+app.use(errorMiddleware);
 app.use(koaBody());
 
 router.get("/health", (ctx) => {

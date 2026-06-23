@@ -5,14 +5,15 @@ import {
   comparePassword,
   signRefreshToken,
   verifyRefreshToken,
+  signAccessToken,
+  BizError,
 } from "@/utils";
-import { signAccessToken } from "@/utils";
 
 const authService = {
   async register(username: string, password: string) {
     const existingUser = await userRepository.findUserByUsername(username);
     if (existingUser) {
-      throw new Error("User already exists");
+      throw new BizError("USER_ALREADY_EXISTS");
     }
     const hashedPassword = await hashPassword(password);
     const user = await userRepository.createUser({
@@ -26,11 +27,11 @@ const authService = {
   async login(username: string, password: string) {
     const user = await userRepository.findUserByUsername(username);
     if (!user) {
-      throw new Error("Username or password is incorrect");
+      throw new BizError("INVALID_CREDENTIALS");
     }
     const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Username or password is incorrect");
+      throw new BizError("INVALID_CREDENTIALS");
     }
     const payload = { userId: user._id.toString(), username: user.username };
     // access token
@@ -53,7 +54,7 @@ const authService = {
     const stored = await tokenRepository.getRefreshToken(payload.userId);
 
     if (!stored || stored !== refreshToken) {
-      throw new Error("Invalid refresh token");
+      throw new BizError("INVALID_REFRESH_TOKEN");
     }
 
     const accessToken = signAccessToken({
