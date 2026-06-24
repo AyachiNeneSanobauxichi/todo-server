@@ -5,8 +5,9 @@ import { success } from "@/utils";
 
 const todoController = {
   async createTodo(ctx: Context) {
+    const userId = ctx.state.user.userId;
     const todoPayload = ctx.request.body as CreateTodoDTO;
-    const data = await todoService.createTodo(todoPayload);
+    const data = await todoService.createTodo(userId, todoPayload);
     success(ctx, data);
   },
 
