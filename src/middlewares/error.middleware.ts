@@ -8,7 +8,7 @@ async function errorMiddleware(ctx: Context, next: Next) {
   } catch (err) {
     if (err instanceof BizError) {
       // 业务错误：已知错误，正常返回给客户端
-      fail(ctx, 200, err.code, err.message);
+      fail(ctx, 400, err.code, err.message);
     } else {
       // 未知错误：系统异常，记日志、不暴露内部细节
       console.error("Unhandled error: ", err);
