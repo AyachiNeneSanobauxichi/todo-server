@@ -13,6 +13,9 @@ const ErrorCode = {
   },
   USER_ALREADY_EXISTS: { code: 11004, message: "User already exists" },
   INVALID_REFRESH_TOKEN: { code: 11005, message: "Invalid refresh token" },
+
+  // 待办事项 12xxx
+  TODO_NOT_FOUND: { code: 12000, message: "Todo not found" },
 } as const;
 
 type ErrorCodeKey = keyof typeof ErrorCode;

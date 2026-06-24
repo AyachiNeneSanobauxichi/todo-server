@@ -1,5 +1,5 @@
 import type { Context } from "koa";
-import { CreateTodoDTO } from "@/interfaces";
+import type { CreateTodoDTO, UpdateTodoDTO } from "@/interfaces";
 import { todoService } from "@/services";
 import { success } from "@/utils";
 
@@ -8,7 +8,7 @@ const todoController = {
     const userId = ctx.state.user.userId;
     const todoPayload = ctx.request.body as CreateTodoDTO;
     const data = await todoService.createTodo(userId, todoPayload);
-    success(ctx, data);
+    success(ctx, data, "Todo created successfully");
   },
 
   async getTodoList(ctx: Context) {
@@ -24,9 +24,14 @@ const todoController = {
   },
 
   async updateTodo(ctx: Context) {
-    // const { name, password } = ctx.request.body as LoginDTO;
-    // const data = await authService.register(username, password);
-    // success(ctx, data);
+    const userId = ctx.state.user.userId;
+    const todoPayload = ctx.request.body as UpdateTodoDTO;
+    const data = await todoService.updateTodo(
+      userId,
+      todoPayload.id,
+      todoPayload,
+    );
+    success(ctx, data, "Todo updated successfully");
   },
 
   async deleteTodo(ctx: Context) {

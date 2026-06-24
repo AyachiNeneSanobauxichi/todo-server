@@ -14,8 +14,12 @@ const todoRepository = {
     return TodoModel.find({ userId });
   },
 
-  updateTodo: (id: string, data: TodoPayload) => {
-    return TodoModel.findByIdAndUpdate(id, data, { new: true });
+  findTodoByIdAndUserId: (id: string, userId: string) => {
+    return TodoModel.findOne({ _id: id, userId });
+  },
+
+  updateTodo: (id: string, data: Partial<TodoPayload>) => {
+    return TodoModel.findByIdAndUpdate(id, data, { returnDocument: "after" });
   },
 
   deleteTodo: (id: string) => {

@@ -19,4 +19,8 @@ const todoSchema = z.object({
     .default("pending"),
 });
 
-export { todoSchema };
+const updateTodoSchema = todoSchema.partial().extend({
+  id: z.string({ error: "Id is required" }).length(24, "Id is invalid"),
+});
+
+export { todoSchema, updateTodoSchema };
