@@ -33,8 +33,7 @@ const authMiddleware = {
       }
 
       ctx.state.user = payload;
-      await next();
-    } catch {
+    } catch (error) {
       fail(
         ctx,
         401,
@@ -43,6 +42,8 @@ const authMiddleware = {
       );
       return;
     }
+
+    await next();
   },
 };
 

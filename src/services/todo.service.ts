@@ -16,6 +16,11 @@ const todoService = {
     return todoRepository.updateTodo(todoId, todoPayload);
   },
 
+  async deleteTodo(userId: string, todoId: string) {
+    await this._checkTodoExists(userId, todoId);
+    return todoRepository.deleteTodo(todoId);
+  },
+
   async _checkTodoExists(userId: string, todoId: string) {
     const todo = await todoRepository.findTodoByIdAndUserId(todoId, userId);
     if (!todo) {

@@ -25,19 +25,20 @@ const todoController = {
 
   async updateTodo(ctx: Context) {
     const userId = ctx.state.user.userId;
-    const todoPayload = ctx.request.body as UpdateTodoDTO;
+    const updateTodoPayload = ctx.request.body as UpdateTodoDTO;
     const data = await todoService.updateTodo(
       userId,
-      todoPayload.id,
-      todoPayload,
+      updateTodoPayload.id,
+      updateTodoPayload,
     );
     success(ctx, data, "Todo updated successfully");
   },
 
   async deleteTodo(ctx: Context) {
-    // const { name, password } = ctx.request.body as LoginDTO;
-    // const data = await authService.register(username, password);
-    // success(ctx, data);
+    const userId = ctx.state.user.userId;
+    const { id } = ctx.params;
+    const data = await todoService.deleteTodo(userId, id);
+    success(ctx, data, "Todo deleted successfully");
   },
 };
 

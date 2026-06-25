@@ -23,7 +23,7 @@ const todoRepository = {
   },
 
   deleteTodo: (id: string) => {
-    return TodoModel.findByIdAndDelete(id);
+    return TodoModel.findByIdAndUpdate(id, { status: "deleted" });
   },
 };
 
