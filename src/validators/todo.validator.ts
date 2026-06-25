@@ -23,8 +23,8 @@ const updateTodoSchema = todoSchema.partial().extend({
   id: z.string({ error: "Id is required" }).length(24, "Id is invalid"),
 });
 
-const deleteTodoSchema = z.object({
+const checkTodoIdSchema = z.object({
   id: z.string({ error: "Id is required" }).length(24, "Id is invalid"),
 });
 
-export { todoSchema, updateTodoSchema, deleteTodoSchema };
+export { todoSchema, updateTodoSchema, checkTodoIdSchema };

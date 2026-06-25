@@ -15,7 +15,7 @@ const todoRepository = {
   },
 
   findTodoByIdAndUserId: (id: string, userId: string) => {
-    return TodoModel.findOne({ _id: id, userId });
+    return TodoModel.findOne({ _id: id, userId, status: { $ne: "deleted" } });
   },
 
   updateTodo: (id: string, data: Partial<TodoPayload>) => {

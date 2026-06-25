@@ -7,6 +7,10 @@ const todoService = {
     return todoRepository.createTodo(userId, todoPayload);
   },
 
+  async getTodoById(userId: string, todoId: string) {
+    return await this._checkTodoExists(userId, todoId);
+  },
+
   async updateTodo(
     userId: string,
     todoId: string,

@@ -11,16 +11,11 @@ const todoController = {
     success(ctx, data, "Todo created successfully");
   },
 
-  async getTodoList(ctx: Context) {
-    // const { name, password } = ctx.request.body as LoginDTO;
-    // const data = await authService.register(username, password);
-    // success(ctx, data);
-  },
-
   async getTodoById(ctx: Context) {
-    // const { name, password } = ctx.request.body as LoginDTO;
-    // const data = await authService.register(username, password);
-    // success(ctx, data);
+    const userId = ctx.state.user.userId;
+    const todoId = ctx.params.id;
+    const todo = await todoService.getTodoById(userId, todoId);
+    success(ctx, todo, "get todo successfully");
   },
 
   async updateTodo(ctx: Context) {
@@ -39,6 +34,12 @@ const todoController = {
     const { id } = ctx.params;
     const data = await todoService.deleteTodo(userId, id);
     success(ctx, data, "Todo deleted successfully");
+  },
+
+  async getTodoList(ctx: Context) {
+    // const { name, password } = ctx.request.body as LoginDTO;
+    // const data = await authService.register(username, password);
+    // success(ctx, data);
   },
 };
 
