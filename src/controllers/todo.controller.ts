@@ -1,5 +1,10 @@
 import type { Context } from "koa";
-import type { CreateTodoDTO, UpdateTodoDTO } from "@/interfaces";
+import type {
+  CreateTodoDTO,
+  UpdateTodoDTO,
+  CheckTodoIdDTO,
+  TodoQueryOptionsDTO,
+} from "@/interfaces";
 import { todoService } from "@/services";
 import { success } from "@/utils";
 
@@ -13,9 +18,16 @@ const todoController = {
 
   async getTodoById(ctx: Context) {
     const userId = ctx.state.user.userId;
-    const todoId = ctx.params.id;
-    const todo = await todoService.getTodoById(userId, todoId);
-    success(ctx, todo, "get todo successfully");
+    const { id } = ctx.params as CheckTodoIdDTO;
+    const data = await todoService.getTodoById(userId, id);
+    success(ctx, data, "get todo successfully");
+  },
+
+  async getTodoList(ctx: Context) {
+    const userId = ctx.state.user.userId;
+    const options = ctx.request.body as TodoQueryOptionsDTO;
+    const data = await todoService.getTodoList(userId, options);
+    success(ctx, data, "get todo list successfully");
   },
 
   async updateTodo(ctx: Context) {
@@ -31,15 +43,9 @@ const todoController = {
 
   async deleteTodo(ctx: Context) {
     const userId = ctx.state.user.userId;
-    const { id } = ctx.params;
+    const { id } = ctx.params as CheckTodoIdDTO;
     const data = await todoService.deleteTodo(userId, id);
     success(ctx, data, "Todo deleted successfully");
-  },
-
-  async getTodoList(ctx: Context) {
-    // const { name, password } = ctx.request.body as LoginDTO;
-    // const data = await authService.register(username, password);
-    // success(ctx, data);
   },
 };
 

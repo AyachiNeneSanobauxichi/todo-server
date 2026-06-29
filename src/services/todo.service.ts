@@ -1,4 +1,4 @@
-import type { TodoPayload } from "@/types";
+import type { TodoPayload, TodoQueryOptions } from "@/types";
 import { todoRepository } from "@/repositories";
 import { BizError } from "@/utils";
 
@@ -8,7 +8,11 @@ const todoService = {
   },
 
   async getTodoById(userId: string, todoId: string) {
-    return await this._checkTodoExists(userId, todoId);
+    return todoRepository.findTodoById(userId, todoId);
+  },
+
+  async getTodoList(userId: string, options: TodoQueryOptions) {
+    return todoRepository.findTodoByUserId(userId, options);
   },
 
   async updateTodo(

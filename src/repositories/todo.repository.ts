@@ -1,4 +1,4 @@
-import type { TodoPayload } from "@/types";
+import type { TodoPayload, TodoQueryOptions } from "@/types";
 import { TodoModel } from "@/models";
 
 const todoRepository = {
@@ -6,12 +6,39 @@ const todoRepository = {
     return TodoModel.create({ ...data, userId });
   },
 
-  findTodoById: (id: string) => {
-    return TodoModel.findById(id);
+  findTodoById: (userId: string, id: string) => {
+    return TodoModel.findOne({
+      _id: id,
+      userId,
+      status: { $ne: "deleted" },
+    }).select("+content");
   },
 
-  findTodoByUserId: (userId: string) => {
-    return TodoModel.find({ userId });
+  findTodoByUserId: (userId: string, options: TodoQueryOptions) => {
+    const {
+      pageNumber,
+      pageSize,
+      todoName,
+      todoType,
+      todoStatus,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = options;
+
+    const filter = Object.fromEntries(
+      Object.entries({
+        userId,
+        name: todoName ? { $regex: todoName, $options: "i" } : void 0,
+        type: todoType || void 0,
+        status: todoStatus || void 0,
+      }).filter(([_, val]) => !!val),
+    );
+
+    return TodoModel.paginate(filter, {
+      page: pageNumber,
+      limit: pageSize,
+      sort: { [sortBy]: sortOrder === "desc" ? -1 : 1 },
+    });
   },
 
   findTodoByIdAndUserId: (id: string, userId: string) => {

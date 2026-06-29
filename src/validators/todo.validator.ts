@@ -27,4 +27,35 @@ const checkTodoIdSchema = z.object({
   id: z.string({ error: "Id is required" }).length(24, "Id is invalid"),
 });
 
-export { todoSchema, updateTodoSchema, checkTodoIdSchema };
+const todoQueryOptionsSchema = z.object({
+  pageNumber: z
+    .number({ error: "Page number is required" })
+    .min(1, "Page number must be at least 1"),
+  pageSize: z
+    .number({ error: "Page size is required" })
+    .min(10, "Page size must be at least 10"),
+  todoName: z.string().optional(),
+  todoType: z
+    .enum(["normal", "important", "urgent"], { error: "Todo type is invalid" })
+    .optional(),
+  todoStatus: z
+    .enum(["pending", "completed", "doing", "deleted"], {
+      error: "Todo status is invalid",
+    })
+    .optional(),
+  sortBy: z
+    .enum(["createdAt", "updatedAt", "type", "status"], {
+      error: "Sort by is invalid",
+    })
+    .optional(),
+  sortOrder: z
+    .enum(["asc", "desc"], { error: "Sort order is invalid" })
+    .optional(),
+});
+
+export {
+  todoSchema,
+  updateTodoSchema,
+  checkTodoIdSchema,
+  todoQueryOptionsSchema,
+};

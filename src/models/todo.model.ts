@@ -1,5 +1,6 @@
-import type { InferSchemaType } from "mongoose";
+import type { InferSchemaType, PaginateModel } from "mongoose";
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const todoSchema = new Schema(
   {
@@ -24,8 +25,10 @@ const todoSchema = new Schema(
   { timestamps: true },
 );
 
+todoSchema.plugin(mongoosePaginate);
+
 type Todo = InferSchemaType<typeof todoSchema>;
-const TodoModel = model<Todo>("Todo", todoSchema);
+const TodoModel = model<Todo, PaginateModel<Todo>>("Todo", todoSchema);
 
 export type { Todo };
 export { TodoModel };
