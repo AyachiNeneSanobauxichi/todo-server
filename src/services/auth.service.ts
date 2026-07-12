@@ -29,8 +29,8 @@ const authService = {
     };
   },
 
-  async login(username: string, password: string) {
-    const user = await userRepository.findUserByUsername(username);
+  async login(identifier: string, password: string) {
+    const user = await userRepository.findUserByIdentifier(identifier);
     if (!user) {
       throw new BizError("INVALID_CREDENTIALS");
     }
@@ -51,7 +51,11 @@ const authService = {
       7 * 24 * 60 * 60,
     );
 
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+      user: { username: user.username, email: user.email },
+    };
   },
 
   async refreshToken(refreshToken: string) {

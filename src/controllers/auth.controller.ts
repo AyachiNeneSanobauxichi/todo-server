@@ -1,19 +1,19 @@
 import type { Context } from "koa";
-import type { LoginDTO, RefreshTokenDTO } from "@/interfaces";
+import type { RegisterDTO, LoginDTO, RefreshTokenDTO } from "@/interfaces";
 import type { AccessTokenPayload } from "@/types";
 import { authService } from "@/services";
 import { success } from "@/utils";
 
 const authController = {
   async register(ctx: Context) {
-    const { username, email, password } = ctx.request.body as LoginDTO;
+    const { username, email, password } = ctx.request.body as RegisterDTO;
     const data = await authService.register(username, email, password);
     success(ctx, data);
   },
 
   async login(ctx: Context) {
-    const { username, password } = ctx.request.body as LoginDTO;
-    const data = await authService.login(username, password);
+    const { identifier, password } = ctx.request.body as LoginDTO;
+    const data = await authService.login(identifier, password);
     success(ctx, data);
   },
 
