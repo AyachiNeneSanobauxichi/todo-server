@@ -6,8 +6,8 @@ import { success } from "@/utils";
 
 const authController = {
   async register(ctx: Context) {
-    const { username, password } = ctx.request.body as LoginDTO;
-    const data = await authService.register(username, password);
+    const { username, email, password } = ctx.request.body as LoginDTO;
+    const data = await authService.register(username, email, password);
     success(ctx, data);
   },
 

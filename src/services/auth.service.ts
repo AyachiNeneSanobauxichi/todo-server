@@ -10,7 +10,7 @@ import {
 } from "@/utils";
 
 const authService = {
-  async register(username: string, password: string) {
+  async register(username: string, email: string, password: string) {
     const existingUser = await userRepository.findUserByUsername(username);
     if (existingUser) {
       throw new BizError("USER_ALREADY_EXISTS");
@@ -18,10 +18,15 @@ const authService = {
     const hashedPassword = await hashPassword(password);
     const user = await userRepository.createUser({
       username,
+      email,
       password: hashedPassword,
     });
 
-    return { id: user._id.toString(), userName: user.username };
+    return {
+      id: user._id.toString(),
+      email: user.email,
+      userName: user.username,
+    };
   },
 
   async login(username: string, password: string) {
