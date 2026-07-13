@@ -30,7 +30,7 @@ const todoRepository = {
         userId,
         name: todoName ? { $regex: todoName, $options: "i" } : void 0,
         type: todoType || void 0,
-        status: todoStatus || void 0,
+        status: todoStatus || { $ne: "deleted" },
       }).filter(([_, val]) => !!val),
     );
 
