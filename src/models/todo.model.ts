@@ -4,7 +4,7 @@ import mongoosePaginate from "mongoose-paginate-v2";
 
 const todoSchema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
     content: { type: String, required: true, select: false },
     type: {
       type: String,

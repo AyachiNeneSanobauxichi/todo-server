@@ -10,7 +10,6 @@ const todoRepository = {
     return TodoModel.findOne({
       _id: id,
       userId,
-      status: { $ne: "deleted" },
     }).select("+content");
   },
 
@@ -42,7 +41,7 @@ const todoRepository = {
   },
 
   findTodoByIdAndUserId: (id: string, userId: string) => {
-    return TodoModel.findOne({ _id: id, userId, status: { $ne: "deleted" } });
+    return TodoModel.findOne({ _id: id, userId });
   },
 
   updateTodo: (id: string, data: Partial<TodoPayload>) => {
