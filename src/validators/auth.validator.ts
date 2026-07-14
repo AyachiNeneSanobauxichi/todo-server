@@ -31,8 +31,4 @@ const loginSchema = z.object({
   password: z.string({ error: "Password is required" }),
 });
 
-const refreshTokenSchema = z.object({
-  refreshToken: z.string({ error: "Refresh token is required" }),
-});
-
-export { registerSchema, loginSchema, refreshTokenSchema };
+export { registerSchema, loginSchema };
